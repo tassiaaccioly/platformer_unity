@@ -17,7 +17,11 @@ public class Player : MonoBehaviour
     private Transform groundCheck;
 
     private bool facingRight;
+
     private bool jumping;
+    public int totalJump;
+    private int maxJump;
+
     private bool grounded;
 
     // Attack
@@ -42,10 +46,15 @@ public class Player : MonoBehaviour
 
         grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));
 
-        if (Input.GetButtonDown("Jump") || Input.GetKeyDown(KeyCode.W))
+        if ((Input.GetButtonDown("Jump") || Input.GetKeyDown(KeyCode.W)) && maxJump > 0)
         {
             grounded = false;
             jumping = true;
+        }
+
+        if (grounded)
+        {
+            maxJump = totalJump;
         }
 
         if(Input.GetButtonDown("Fire1") && grounded && Time.time > nextAttack)
@@ -69,8 +78,9 @@ public class Player : MonoBehaviour
         }
 
         //JUMPING
-        if(jumping && grounded)
+        if(jumping)
         {
+            maxJump--;
             jumping = false;
 
             //rb2D.velocity = new Vector2(rb2D.velocity.x, 0f);
