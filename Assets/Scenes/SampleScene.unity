@@ -6549,7 +6549,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1187647927}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &854895101
 GameObject:
@@ -6689,9 +6689,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2664ba1151a955047b42c736afd2e585, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDead: 0
+  health: 3
   moveSpeed: 5
-  jumpForce: 500
   groundCheck: {fileID: 609483022}
+  jumpForce: 450
   totalJump: 2
   attackRate: 2
   spawnAttack: {fileID: 1309874892}
@@ -17743,9 +17745,10 @@ GameObject:
   - component: {fileID: 1187647925}
   - component: {fileID: 1187647924}
   - component: {fileID: 1187647928}
+  - component: {fileID: 1187647929}
   m_Layer: 0
   m_Name: Zombie
-  m_TagString: Untagged
+  m_TagString: Zombie
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -17847,9 +17850,10 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1187647923}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.91, y: -1.19, z: 9.39}
+  m_LocalPosition: {x: 3.89, y: -1.19, z: 9.39}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 1741986193}
   - {fileID: 848923647}
   m_Father: {fileID: 0}
   m_RootOrder: 5
@@ -17866,9 +17870,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: feae8755e809e9c4db67c0fbcbf89fcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundCheck: {fileID: 1535567373}
+  groundCheck: {fileID: 848923647}
   moveSpeed: 2
-  layerMask: 0
+  health: 2
+  isDead: 0
+--- !u!95 &1187647929
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1187647923}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ec6d33ba13dc81c4ca6931641f6ba9c5, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1218039653
 GameObject:
   m_ObjectHideFlags: 0
@@ -18443,6 +18467,53 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.25180674, y: 1.4570677}
   m_EdgeRadius: 0
+--- !u!1 &1741986192
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1741986193}
+  - component: {fileID: 1741986194}
+  m_Layer: 0
+  m_Name: Collider
+  m_TagString: Zombie
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1741986193
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1741986192}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1187647927}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!70 &1741986194
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1741986192}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.07065773, y: -0.07632244}
+  m_Size: {x: 0.68640137, y: 1.1526449}
+  m_Direction: 0
 --- !u!1 &1872535159
 GameObject:
   m_ObjectHideFlags: 0
@@ -22638,7 +22709,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2100764421}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.222205, y: -0.8658412, z: 8.737074}
+  m_LocalPosition: {x: -8.03, y: -1.09, z: 9.39}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1535567373}
@@ -22653,8 +22724,12 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 4943173571065145468, guid: e2548e04e9ca2314ab792134a3c9e590, type: 3}
+      propertyPath: health
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4943173571065145468, guid: e2548e04e9ca2314ab792134a3c9e590, type: 3}
       propertyPath: jumpForce
-      value: 500
+      value: 450
       objectReference: {fileID: 0}
     - target: {fileID: 4943173571065145468, guid: e2548e04e9ca2314ab792134a3c9e590, type: 3}
       propertyPath: totalJump
@@ -22707,6 +22782,10 @@ PrefabInstance:
     - target: {fileID: 4943173571065145471, guid: e2548e04e9ca2314ab792134a3c9e590, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4943173571065146240, guid: e2548e04e9ca2314ab792134a3c9e590, type: 3}
+      propertyPath: m_Mass
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4943173571065146240, guid: e2548e04e9ca2314ab792134a3c9e590, type: 3}
       propertyPath: m_GravityScale

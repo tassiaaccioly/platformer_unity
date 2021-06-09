@@ -6,23 +6,24 @@ public class Player : MonoBehaviour
 {
     private Rigidbody2D rb2D;
     private Animator anim;
+    private SpriteRenderer sprite;
+
+    public bool isDead;
+    public int health;
 
     [SerializeField]
     private int moveSpeed = 5;
-
-    [SerializeField]
-    private float jumpForce;
+    private bool facingRight;
 
     [SerializeField]
     private Transform groundCheck;
+    private bool grounded;
 
-    private bool facingRight;
-
+    [SerializeField]
+    private float jumpForce;
     private bool jumping;
     public int totalJump;
     private int maxJump;
-
-    private bool grounded;
 
     // Attack
     public float attackRate;
@@ -33,16 +34,20 @@ public class Player : MonoBehaviour
     void Start()
     {
         rb2D = GetComponent<Rigidbody2D>();
+        sprite = GetComponent<SpriteRenderer>();
+        isDead = false;
         grounded = true;
         anim = GetComponent<Animator>();
         facingRight = true;
+        maxJump = 0;
         nextAttack = 0;
     }
 
     //update is called once per frame
     private void Update()
     {
-        setAnimations();
+        if (isDead)
+            return;
 
         grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));
 
@@ -57,17 +62,23 @@ public class Player : MonoBehaviour
             maxJump = totalJump;
         }
 
+        //if button attack is pressed and character is on the ground and the time t
         if(Input.GetButtonDown("Fire1") && grounded && Time.time > nextAttack)
         {
             Attack();
         }
+
+        setAnimations();
     }
 
     private void FixedUpdate()
     {
+        if (isDead)
+            return;
+
         float direction = Input.GetAxis("Horizontal");
 
-        rb2D.velocity = new Vector2((Input.GetAxis("Horizontal")) * moveSpeed, rb2D.velocity.y);
+        rb2D.velocity = new Vector2(direction * moveSpeed, rb2D.velocity.y);
 
         //to change direction of character animation
 
@@ -98,6 +109,46 @@ public class Player : MonoBehaviour
         if(!facingRight)
         {
             cloneAtk.transform.eulerAngles = new Vector3(180, 0, 180);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (isDead)
+            return;
+
+        if (collision.CompareTag("Zombie"))
+        {
+            DamagePlayer();
+        }
+    }
+
+    IEnumerator DamageEffect()
+    {
+        sprite.enabled = false;
+        yield return new WaitForSeconds(.1f);
+        sprite.enabled = true;
+        yield return new WaitForSeconds(.1f);
+        sprite.enabled = false;
+        yield return new WaitForSeconds(.1f);
+        sprite.enabled = true;
+
+    }
+
+    private void DamagePlayer()
+    {
+        health--;
+
+        if(health == 0)
+        {
+            isDead = true;
+            moveSpeed = 0;
+            rb2D.velocity = new Vector2(0f, 0f);
+            anim.SetTrigger("Dead");
+        }
+        else
+        {
+            StartCoroutine(DamageEffect());
         }
     }
 
