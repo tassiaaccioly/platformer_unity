@@ -5,21 +5,26 @@ using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
+    // Instances of Objects
     private Rigidbody2D rb2D;
     private Animator anim;
     private SpriteRenderer sprite;
 
+    // Life
     public bool isDead;
     public int health;
 
+    // Movement
     [SerializeField]
     private int moveSpeed = 5;
     private bool facingRight;
 
+    // Ground
     [SerializeField]
     private Transform groundCheck;
     private bool grounded;
 
+    //Jump
     [SerializeField]
     private float jumpForce;
     private bool jumping;
@@ -31,6 +36,21 @@ public class Player : MonoBehaviour
     public Transform spawnAttack;
     public GameObject attackPrefab;
     private float nextAttack;
+
+    //particles
+    public GameObject particleDeath;
+    public GameObject particleDamage;
+    public GameObject particleRevive;
+    public GameObject particleAttack;
+
+    // public GameObject particleJump;
+
+    // Audio
+    public AudioClip fxHurt;
+    public AudioClip fxJump;
+    public AudioClip fxAttack;
+
+
 
     void Start()
     {
@@ -56,6 +76,8 @@ public class Player : MonoBehaviour
 
         if ((Input.GetButtonDown("Jump") || Input.GetKeyDown(KeyCode.W)) && maxJump > 0)
         {
+            // Instantiate(particleJump, gameObject.transform.position, gameObject.transform.rotation);
+            AudioManager.instance.PlaySound(fxJump);
             grounded = false;
             jumping = true;
         }
@@ -104,6 +126,9 @@ public class Player : MonoBehaviour
 
     private void Attack()
     {
+        AudioManager.instance.PlaySound(fxAttack);
+        Instantiate(particleAttack, gameObject.transform.position, gameObject.transform.rotation);
+
         anim.SetTrigger("Attack");
         nextAttack = Time.time + attackRate;
 
@@ -128,6 +153,7 @@ public class Player : MonoBehaviour
 
     IEnumerator DamageEffect()
     {
+        Instantiate(particleDamage, gameObject.transform.position, gameObject.transform.rotation);
         sprite.enabled = false;
         yield return new WaitForSeconds(.1f);
         sprite.enabled = true;
@@ -141,6 +167,7 @@ public class Player : MonoBehaviour
     private void DamagePlayer()
     {
         health--;
+        AudioManager.instance.PlaySound(fxHurt);
 
         HudLife.instance.RefreshLife(health);
 
@@ -150,6 +177,7 @@ public class Player : MonoBehaviour
             moveSpeed = 0;
             rb2D.velocity = new Vector2(0f, 0f);
             anim.SetTrigger("Dead");
+            Instantiate(particleDeath, gameObject.transform.position, gameObject.transform.rotation);
 
             //this function runs a function after some defined time.
             Invoke("ReloadLevel", 1f);
@@ -163,6 +191,7 @@ public class Player : MonoBehaviour
     public void ReloadLevel()
     {
         SceneManager.LoadScene("Level1", LoadSceneMode.Single);
+        Instantiate(particleRevive, gameObject.transform.position, gameObject.transform.rotation);
     }
 
     private void setAnimations()

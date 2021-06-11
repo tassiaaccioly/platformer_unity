@@ -17,6 +17,9 @@ public class Zombie : MonoBehaviour
     public int health;
     public bool isDead;
 
+    public GameObject particleDeath;
+    public GameObject particleDamage;
+
     void Start()
     {
         touchedWall = false;
@@ -69,9 +72,16 @@ public class Zombie : MonoBehaviour
         if (health <= 0)
         {
             isDead = true;
+
+            Instantiate(particleDeath, gameObject.transform.position, gameObject.transform.rotation);
+
             rb2d.velocity = new Vector2(0f, 0f);
             anim.SetBool("isDead", true);
             StartCoroutine(isDeadAnimation());
+        }
+        else
+        {
+            Instantiate(particleDamage, gameObject.transform.position, gameObject.transform.rotation);
         }
     }
 
