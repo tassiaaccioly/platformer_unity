@@ -38,16 +38,22 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - Background
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 3607375669
     locked: 0
   - name: Objects Back
     uniqueID: 3476748777
     locked: 0
   - name: Player
     uniqueID: 731309199
+    locked: 0
+  - name: Zombie
+    uniqueID: 4132959647
     locked: 0
   - name: Floor
     uniqueID: 3555294337
@@ -57,4 +63,7 @@ TagManager:
     locked: 0
   - name: Front
     uniqueID: 4012268331
+    locked: 0
+  - name: UI
+    uniqueID: 2568028493
     locked: 0

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -41,6 +42,8 @@ public class Player : MonoBehaviour
         facingRight = true;
         maxJump = 0;
         nextAttack = 0;
+
+        HudLife.instance.RefreshLife(health);
     }
 
     //update is called once per frame
@@ -139,17 +142,27 @@ public class Player : MonoBehaviour
     {
         health--;
 
+        HudLife.instance.RefreshLife(health);
+
         if(health == 0)
         {
             isDead = true;
             moveSpeed = 0;
             rb2D.velocity = new Vector2(0f, 0f);
             anim.SetTrigger("Dead");
+
+            //this function runs a function after some defined time.
+            Invoke("ReloadLevel", 1f);
         }
         else
         {
             StartCoroutine(DamageEffect());
         }
+    }
+
+    public void ReloadLevel()
+    {
+        SceneManager.LoadScene("Level1", LoadSceneMode.Single);
     }
 
     private void setAnimations()
